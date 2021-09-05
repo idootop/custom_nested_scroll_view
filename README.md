@@ -31,7 +31,7 @@ Fixed by:
 
 ## 💡 Usage
 
-```dart
+```shell
 dependencies:  
   ...  
   custom_nested_scroll_view:
