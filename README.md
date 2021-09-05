@@ -32,6 +32,14 @@ Fixed by:
 ## 💡 Usage
 
 ```dart
+dependencies:  
+  ...  
+  custom_nested_scroll_view:
+    git:
+      url: https://github.com/idootop/custom_nested_scroll_view.git
+```
+
+```dart
 import 'package:flutter/material.dart';
 import 'package:custom_nested_scroll_view/custom_nested_scroll_view.dart';
 
