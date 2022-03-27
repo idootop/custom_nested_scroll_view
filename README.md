@@ -4,7 +4,7 @@ A NestedScrollView that supports outer scroller to top overscroll.
 
 ## 🌍 Preview
 
-Web demo 👉   [Click Here](https://killer-1255480117.cos.ap-chongqing.myqcloud.com/web/scrollMaster/index.html)
+Web demo 👉 [Click Here](https://killer-1255480117.cos.ap-chongqing.myqcloud.com/web/scrollMaster/index.html)
 
 ## 🐛 Problem
 
@@ -12,7 +12,7 @@ Web demo 👉   [Click Here](https://killer-1255480117.cos.ap-chongqing.myqcloud
 
 **Problem: NestedScrollView does not support outer scroller to top overscroll, so its SliverAppBar cannot be stretched.**
 
-*Related issue: [https://github.com/flutter/flutter/issues/54059](https://github.com/flutter/flutter/issues/54059)*
+_Related issue: [https://github.com/flutter/flutter/issues/54059](https://github.com/flutter/flutter/issues/54059)_
 
 ![](screenshots/case1.gif)
 
@@ -20,20 +20,20 @@ Web demo 👉   [Click Here](https://killer-1255480117.cos.ap-chongqing.myqcloud
 
 Fixed by:
 
-1. Override the applyUserOffset method of _NestedScrollCoordinator to allow over-scroll the top of _outerPosition.
+1. Override the applyUserOffset method of \_NestedScrollCoordinator to allow over-scroll the top of \_outerPosition.
 
-2. Override the unnestOffset, nestOffset, _getMetrics methods of _NestedScrollCoordinator to fix the mapping between _innerPosition and _outerPosition to _NestedScrollPosition (Coordinator).
+2. Override the unnestOffset, nestOffset, \_getMetrics methods of \_NestedScrollCoordinator to fix the mapping between \_innerPosition and \_outerPosition to \_NestedScrollPosition (Coordinator).
 
-*For more information, see:*
+_For more information, see:_
 
-* `example/lib/main.dart`
-* `lib/src/custom_nested_scroll_view.dart`
+- `example/lib/main.dart`
+- `lib/src/custom_nested_scroll_view.dart`
 
 ## 💡 Usage
 
 ```shell
-dependencies:  
-  ...  
+dependencies:
+  ...
   custom_nested_scroll_view:
     git:
       url: https://github.com/idootop/custom_nested_scroll_view.git
@@ -62,12 +62,14 @@ class Home extends StatelessWidget {
       length: 2,
       child: Scaffold(
         body: CustomNestedScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           overscrollType: CustomOverscroll.outer,
           headerSliverBuilder: (context, outerScrolled) => <Widget>[
             CustomSliverOverlapAbsorber(
               overscrollType: CustomOverscroll.outer,
-              handle: CustomNestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              handle: CustomNestedScrollView.sliverOverlapAbsorberHandleFor(context), // this context is from headerSliverBuilder
               sliver: SliverAppBar(
                 pinned: true,
                 stretch: true,
@@ -92,6 +94,10 @@ class Home extends StatelessWidget {
           body: TabBarView(
             children: [
               CustomScrollView(
+                // important
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
                 slivers: <Widget>[
                   Builder(
                     builder: (context) => CustomSliverOverlapInjector(
@@ -99,17 +105,16 @@ class Home extends StatelessWidget {
                       handle: CustomNestedScrollView.sliverOverlapAbsorberHandleFor(context),
                     ),
                   ),
-                  SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate(
-                      (_, index) => ListTile(
-                        key: Key('$index'),
+                  ...List.generate(
+                    20,
+                    (index) => SliverToBoxAdapter(
+                      key: Key('$index'),
+                      child: ListTile(
                         title: Center(
                           child: Text('ListTile ${index + 1}'),
                         ),
                       ),
-                      childCount: 30,
                     ),
-                    itemExtent: 50,
                   ),
                 ],
               ),
@@ -125,14 +130,16 @@ class Home extends StatelessWidget {
 }
 ```
 
+For more examples, see [https://github.com/idootop/scroll_master](https://github.com/idootop/scroll_master)（**Highly recommended**）
+
 ## ❤️ Acknowledgements
 
 Thanks to [fluttercandies](https://github.com/fluttercandies)'s [extended_nested_scroll_view](https://github.com/fluttercandies/extended_nested_scroll_view).
 
 ## 📖 References
 
-* [大道至简：Flutter嵌套滑动冲突解决之路](http://vimerzhao.top/posts/flutter-nested-scroll-conflict/)
-* [深入进阶-如何解决Flutter上的滑动冲突？ ](https://juejin.cn/post/6900751363173515278)
-* [用Flutter实现58App的首页](https://blog.csdn.net/weixin_39891694/article/details/111217123)
-* [不一样角度带你了解 Flutter 中的滑动列表实现](https://blog.csdn.net/ZuoYueLiang/article/details/116245138)
-* [Flutter 滑动体系 ](https://juejin.cn/post/6983338779415150628)
+- [大道至简：Flutter 嵌套滑动冲突解决之路](http://vimerzhao.top/posts/flutter-nested-scroll-conflict/)
+- [深入进阶-如何解决 Flutter 上的滑动冲突？ ](https://juejin.cn/post/6900751363173515278)
+- [用 Flutter 实现 58App 的首页](https://blog.csdn.net/weixin_39891694/article/details/111217123)
+- [不一样角度带你了解 Flutter 中的滑动列表实现](https://blog.csdn.net/ZuoYueLiang/article/details/116245138)
+- [Flutter 滑动体系 ](https://juejin.cn/post/6983338779415150628)
