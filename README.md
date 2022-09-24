@@ -38,7 +38,7 @@ dependencies:
     git:
       url: https://github.com/idootop/custom_nested_scroll_view.git
       # Which branch to use is based on your local flutter version
-      ref: flutter_3.0 # flutter_2.x flutter_3.0 flutter_3.4
+      ref: flutter-3.0 # flutter-2.x flutter-3.0 flutter-3.4-pre
 ```
 
 |    Git branch   | Supported flutter versions |
