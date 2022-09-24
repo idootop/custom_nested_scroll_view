@@ -206,6 +206,7 @@ class _NestedScrollPositionY extends _NestedScrollPosition {
           this,
           simulation,
           context.vsync,
+          activity?.shouldIgnorePointer ?? true,
         );
       case _NestedBallisticScrollActivityMode.inner:
         return _NestedInnerBallisticScrollActivityY(
@@ -213,9 +214,10 @@ class _NestedScrollPositionY extends _NestedScrollPosition {
           this,
           simulation,
           context.vsync,
+          activity?.shouldIgnorePointer ?? true,
         );
       case _NestedBallisticScrollActivityMode.independent:
-        return BallisticScrollActivity(this, simulation, context.vsync);
+        return BallisticScrollActivity(this, simulation, context.vsync, activity?.shouldIgnorePointer ?? true);
     }
   }
 }
@@ -226,8 +228,8 @@ class _NestedBallisticScrollActivityY extends BallisticScrollActivity {
     _NestedScrollPosition position,
     Simulation simulation,
     TickerProvider vsync,
-  ) : super(position, simulation, vsync);
-
+    bool shouldIgnorePointer,
+  ) : super(position, simulation, vsync, shouldIgnorePointer);
   final _NestedScrollCoordinator coordinator;
 
   @override
@@ -256,8 +258,8 @@ class _NestedOuterBallisticScrollActivityY
     _NestedScrollPosition position,
     Simulation simulation,
     TickerProvider vsync,
-  ) : super(coordinator, position, simulation, vsync);
-
+    bool shouldIgnorePointer,
+  ) : super(coordinator, position, simulation, vsync, shouldIgnorePointer);
   @override
   void resetActivity() {
     delegate.beginActivity(coordinator.createOuterBallisticScrollActivity(
@@ -280,7 +282,8 @@ class _NestedInnerBallisticScrollActivityY
     _NestedScrollPosition position,
     Simulation simulation,
     TickerProvider vsync,
-  ) : super(coordinator, position, simulation, vsync);
+    bool shouldIgnorePointer,
+  ) : super(coordinator, position, simulation, vsync, shouldIgnorePointer);
 
   @override
   void resetActivity() {

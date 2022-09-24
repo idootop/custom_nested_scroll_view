@@ -37,7 +37,16 @@ dependencies:
   custom_nested_scroll_view:
     git:
       url: https://github.com/idootop/custom_nested_scroll_view.git
+      # Which branch to use is based on your local flutter version
+      ref: flutter_3.0 # flutter_2.x flutter_3.0 flutter_3.4
 ```
+
+|    Git branch   | Supported flutter versions |
+|---------------|--------------------------|
+| main            | >= 3.4.0-27.0.pre          |
+| flutter-3.4-pre | >= 3.4.0-17.0.pre < 3.4.0-27.0.pre |
+| flutter-3.0     | >= 2.12.0-4.0.pre < 3.4.0-17.0.pre |
+| flutter-2.x     | < 2.12.0-4.0.pre           |
 
 ```dart
 import 'package:flutter/material.dart';
@@ -58,72 +67,112 @@ class MyApp extends StatelessWidget {
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: CustomNestedScrollView(
+    return Scaffold(
+      body: DefaultTabController(
+        length: 2,
+        child: CustomNestedScrollView(
+          overscrollType: CustomOverscroll.outer,
+          // !important
           physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
           ),
-          overscrollType: CustomOverscroll.outer,
-          headerSliverBuilder: (context, outerScrolled) => <Widget>[
-            CustomSliverOverlapAbsorber(
-              overscrollType: CustomOverscroll.outer,
-              handle: CustomNestedScrollView.sliverOverlapAbsorberHandleFor(context), // this context is from headerSliverBuilder
-              sliver: SliverAppBar(
-                pinned: true,
-                stretch: true,
-                expandedHeight: 400,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Center(child: Text('Example')),
-                  background: Image.network(
-                    'https://pic1.zhimg.com/80/v2-fc35089cfe6c50f97324c98f963930c9_720w.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                bottom: TabBar(
-                  tabs: [
-                    Tab(child: Text('Tab1')),
-                    Tab(child: Text('Tab1')),
-                  ],
-                ),
-              ),
-            ),
+          headerSliverBuilder: (context, innerScrolled) => <Widget>[
+            MySliverAppBar(),
           ],
           body: TabBarView(
             children: [
               CustomScrollView(
-                // important
+                // !important
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),
                 ),
                 slivers: <Widget>[
-                  Builder(
-                    builder: (context) => CustomSliverOverlapInjector(
-                      overscrollType: CustomOverscroll.outer,
-                      handle: CustomNestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                    ),
-                  ),
-                  ...List.generate(
-                    20,
-                    (index) => SliverToBoxAdapter(
-                      key: Key('$index'),
-                      child: ListTile(
+                  TopOverlapInjector(),
+                  // scroll view
+                  SliverFixedExtentList(
+                    delegate: SliverChildBuilderDelegate(
+                      (_, index) => ListTile(
+                        key: Key('$index'),
                         title: Center(
                           child: Text('ListTile ${index + 1}'),
                         ),
                       ),
+                      childCount: 30,
+                    ),
+                    itemExtent: 50,
+                  ),
+                ],
+              ),
+              CustomScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                slivers: <Widget>[
+                  TopOverlapInjector(),
+                  // some widget
+                  SliverFillRemaining(
+                    child: Center(
+                      child: Text('Test'),
                     ),
                   ),
                 ],
               ),
-              Center(
-                child: Text('Test'),
-              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TopOverlapInjector extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) => CustomSliverOverlapInjector(
+        overscrollType: CustomOverscroll.outer,
+        handle: CustomNestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      ),
+    );
+  }
+}
+
+class MySliverAppBar extends StatelessWidget {
+  ///Header collapsed height
+  final minHeight = 120.0;
+
+  ///Header expanded height
+  final maxHeight = 400.0;
+
+  final tabBar = TabBar(
+    tabs: <Widget>[Text('Tab1'), Text('Tab2')],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final topHeight = MediaQuery.of(context).padding.top;
+    return CustomSliverOverlapAbsorber(
+      overscrollType: CustomOverscroll.outer,
+      handle: CustomNestedScrollView.sliverOverlapAbsorberHandleFor(
+        context,
+      ),
+      sliver: SliverAppBar(
+        pinned: true,
+        stretch: true,
+        toolbarHeight: minHeight - tabBar.preferredSize.height - topHeight,
+        collapsedHeight: minHeight - tabBar.preferredSize.height - topHeight,
+        expandedHeight: maxHeight - topHeight,
+        flexibleSpace: FlexibleSpaceBar(
+          centerTitle: true,
+          title: Center(child: Text('Example')),
+          stretchModes: <StretchMode>[
+            StretchMode.zoomBackground,
+            StretchMode.blurBackground,
+          ],
+          background: Image.network(
+            'https://pic1.zhimg.com/80/v2-fc35089cfe6c50f97324c98f963930c9_720w.jpg',
+            fit: BoxFit.cover,
+          ),
+        ),
+        bottom: tabBar,
       ),
     );
   }
