@@ -1,16 +1,16 @@
 name: custom_nested_scroll_view
 description: A NestedScrollView that supports outer scroller to top overscroll.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/idootop/custom_nested_scroll_view
 
 environment:
   sdk: ">=2.17.0-0 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=3.4.0-27.0.pre"
 
 dependencies:
   flutter:
     sdk: flutter
-  pedantic: ^1.11.0
+  flutter_lints: ^2.0.1
 
 dev_dependencies:
   flutter_test:

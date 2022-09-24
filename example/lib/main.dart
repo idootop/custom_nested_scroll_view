@@ -4,6 +4,7 @@ import 'package:custom_nested_scroll_view/custom_nested_scroll_view.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,11 +54,11 @@ class Home extends StatelessWidget {
                 ],
               ),
               CustomScrollView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 slivers: <Widget>[
                   TopOverlapInjector(),
                   // some widget
-                  SliverFillRemaining(
+                  const SliverFillRemaining(
                     child: Center(
                       child: Text('Test'),
                     ),
@@ -91,7 +92,7 @@ class MySliverAppBar extends StatelessWidget {
   ///Header expanded height
   final maxHeight = 400.0;
 
-  final tabBar = TabBar(
+  final tabBar = const TabBar(
     tabs: <Widget>[Text('Tab1'), Text('Tab2')],
   );
 
@@ -111,7 +112,7 @@ class MySliverAppBar extends StatelessWidget {
         expandedHeight: maxHeight - topHeight,
         flexibleSpace: FlexibleSpaceBar(
           centerTitle: true,
-          title: Center(child: Text('Example')),
+          title: const Center(child: Text('Example')),
           stretchModes: <StretchMode>[
             StretchMode.zoomBackground,
             StretchMode.blurBackground,

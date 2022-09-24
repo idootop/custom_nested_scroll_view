@@ -677,13 +677,6 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
     );
   }
 
-  // TODO(Piinks): https://github.com/flutter/flutter/issues/100748
-  // ! This commit has been reverted. https://github.com/flutter/flutter/commit/5f2d730f1f5a1e96be4ee46a58ece8460f85ff29
-  @override
-  Simulation? updateBallisticAnimation(double initVelocity, double initPosition) {
-    return null;
-  }
-
   ScrollActivity createOuterBallisticScrollActivity(double velocity) {
     // This function creates a ballistic scroll for the outer scrollable.
     //
@@ -1357,13 +1350,6 @@ class _NestedScrollPosition extends ScrollPosition implements ScrollActivityDele
       simulation,
       mode: _NestedBallisticScrollActivityMode.independent,
     ));
-  }
-
-  // TODO(Piinks): see https://github.com/flutter/flutter/issues/100748
-  // ! This commit has been reverted. https://github.com/flutter/flutter/commit/5f2d730f1f5a1e96be4ee46a58ece8460f85ff29
-  @override
-  Simulation? updateBallisticAnimation(double initVelocity, double initPosition) {
-    return null;
   }
 
   ScrollActivity createBallisticScrollActivity(
