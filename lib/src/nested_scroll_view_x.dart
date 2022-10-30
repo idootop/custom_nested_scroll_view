@@ -399,21 +399,20 @@ class _RenderSliverOverlapAbsorberX extends _RenderSliverOverlapAbsorber {
     final SliverGeometry childLayoutGeometry = child!.geometry!;
     final maxExtent = childLayoutGeometry.scrollExtent;
     final minExtent = childLayoutGeometry.maxScrollObstructionExtent;
-    final topOverscroll =
-        childLayoutGeometry.paintExtent > childLayoutGeometry.scrollExtent;
+    final currentExtent = childLayoutGeometry.paintExtent;
+    final topOverscroll = currentExtent > maxExtent;
     final topOverscrollExtend =
-        (childLayoutGeometry.paintExtent - childLayoutGeometry.scrollExtent)
-            .clamp(0, double.infinity);
-    final absorbsExtend =
-        topOverscroll ? 0.0 : childLayoutGeometry.maxScrollObstructionExtent;
+        (currentExtent - maxExtent).clamp(0, double.infinity);
+    final absorbsExtend = topOverscroll ? 0.0 : minExtent;
+    final scrollExtend = topOverscroll
+        ? currentExtent
+        : maxExtent - absorbsExtend - topOverscrollExtend;
+    final layoutExtent = currentExtent - absorbsExtend - topOverscrollExtend;
     geometry = SliverGeometry(
-      scrollExtent: childLayoutGeometry.scrollExtent -
-          absorbsExtend -
-          topOverscrollExtend,
+      scrollExtent: scrollExtend,
+      layoutExtent: layoutExtent,
       paintExtent: childLayoutGeometry.paintExtent,
       paintOrigin: childLayoutGeometry.paintOrigin,
-      layoutExtent:
-          childLayoutGeometry.paintExtent - absorbsExtend - topOverscrollExtend,
       maxPaintExtent: childLayoutGeometry.maxPaintExtent,
       maxScrollObstructionExtent:
           childLayoutGeometry.maxScrollObstructionExtent,
