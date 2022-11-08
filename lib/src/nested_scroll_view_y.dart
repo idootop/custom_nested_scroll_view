@@ -41,10 +41,10 @@ class NestedScrollViewY extends _NestedScrollView {
   }
 
   @override
-  _NestedScrollViewState createState() => _NestedScrollViewStateY();
+  CustomNestedScrollViewState createState() => CustomNestedScrollViewStateY();
 }
 
-class _NestedScrollViewStateY extends _NestedScrollViewState {
+class CustomNestedScrollViewStateY extends CustomNestedScrollViewState {
   @override
   void initState() {
     super.initState();
@@ -96,7 +96,7 @@ class _NestedScrollControllerY extends _NestedScrollController {
 
 class _NestedScrollCoordinatorY extends _NestedScrollCoordinator {
   _NestedScrollCoordinatorY(
-    _NestedScrollViewStateY state,
+    CustomNestedScrollViewStateY state,
     ScrollController? parent,
     VoidCallback onHasScrolledBodyChanged,
     bool floatHeaderSlivers,

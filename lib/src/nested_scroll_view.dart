@@ -313,7 +313,7 @@ class _NestedScrollView extends StatefulWidget {
   }
 
   @override
-  _NestedScrollViewState createState() => _NestedScrollViewState();
+  CustomNestedScrollViewState createState() => CustomNestedScrollViewState();
 }
 
 /// The [State] for a [_NestedScrollView].
@@ -323,17 +323,17 @@ class _NestedScrollView extends StatefulWidget {
 /// useful for obtaining respective scroll positions in the [_NestedScrollView].
 ///
 /// If you want to access the inner or outer scroll controller of a
-/// [_NestedScrollView], you can get its [_NestedScrollViewState] by supplying a
-/// `GlobalKey<_NestedScrollViewState>` to the [_NestedScrollView.key] parameter).
+/// [_NestedScrollView], you can get its [CustomNestedScrollViewState] by supplying a
+/// `GlobalKey<CustomNestedScrollViewState>` to the [_NestedScrollView.key] parameter).
 ///
 /// {@tool dartpad}
-/// [_NestedScrollViewState] can be obtained using a [GlobalKey].
+/// [CustomNestedScrollViewState] can be obtained using a [GlobalKey].
 /// Using the following setup, you can access the inner scroll controller
 /// using `globalKey.currentState.innerController`.
 ///
 /// ** See code in examples/api/lib/widgets/nested_scroll_view/nested_scroll_view_state.0.dart **
 /// {@end-tool}
-class _NestedScrollViewState extends State<_NestedScrollView> {
+class CustomNestedScrollViewState extends State<_NestedScrollView> {
   final _SliverOverlapAbsorberHandle _absorberHandle = _SliverOverlapAbsorberHandle();
 
   /// The [ScrollController] provided to the [ScrollView] in
@@ -503,7 +503,7 @@ class _InheritedNestedScrollView extends InheritedWidget {
        assert(child != null),
        super(key: key, child: child);
 
-  final _NestedScrollViewState state;
+  final CustomNestedScrollViewState state;
 
   @override
   bool updateShouldNotify(_InheritedNestedScrollView old) => state != old.state;
@@ -578,7 +578,7 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
     );
   }
 
-  final _NestedScrollViewState _state;
+  final CustomNestedScrollViewState _state;
   ScrollController? _parent;
   final VoidCallback _onHasScrolledBodyChanged;
   final bool _floatHeaderSlivers;

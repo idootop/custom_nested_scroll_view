@@ -96,8 +96,9 @@ class CustomNestedScrollView extends StatelessWidget {
     this.restorationId,
     this.scrollBehavior,
     this.overscrollType = CustomOverscroll.outer,
-  }) : super(key: key);
+  }): pkey = key, super();
 
+  final Key? pkey;
   final ScrollController? controller;
   final Axis scrollDirection;
   final bool reverse;
@@ -116,6 +117,7 @@ class CustomNestedScrollView extends StatelessWidget {
   Widget build(BuildContext context) {
     return overscrollType == CustomOverscroll.outer
         ? NestedScrollViewX(
+            key: pkey,
             controller: controller,
             scrollDirection: scrollDirection,
             reverse: reverse,
@@ -129,6 +131,7 @@ class CustomNestedScrollView extends StatelessWidget {
             scrollBehavior: scrollBehavior,
           )
         : NestedScrollViewY(
+            key: pkey,
             controller: controller,
             scrollDirection: scrollDirection,
             reverse: reverse,
