@@ -9,10 +9,26 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'dart:ui' as ui;
 
 part 'nested_scroll_view_x.dart';
 part 'nested_scroll_view_y.dart';
 part 'custom_nested_scroll_view.dart';
+
+// FIXME
+// FixedScrollMetrics constructor now has a devicePixelRatio required
+// named parameter.
+
+// For the time being, we get the value from the first view in
+// PlatformDispatcher.instance.views.
+
+// This will work correctly on single-window applications (which are still
+// the only option), but may pose a problem in the future when multiple
+// view support is implemented in flutter.
+double getDevicePixelRatio() {
+  final view = ui.PlatformDispatcher.instance.views.first;
+  return view.devicePixelRatio;
+}
 
 /// Signature used by [_NestedScrollView] for building its header.
 ///
@@ -388,6 +404,7 @@ class CustomNestedScrollViewState extends State<_NestedScrollView> {
       widget.controller,
       _handleHasScrolledBodyChanged,
       widget.floatHeaderSlivers,
+      getDevicePixelRatio(),
     );
   }
 
@@ -517,6 +534,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
     required super.pixels,
     required super.viewportDimension,
     required super.axisDirection,
+    required super.devicePixelRatio,
     required this.minRange,
     required this.maxRange,
     required this.correctionOffset,
@@ -532,6 +550,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
     double? minRange,
     double? maxRange,
     double? correctionOffset,
+    double? devicePixelRatio,
   }) {
     return _NestedScrollMetrics(
       minScrollExtent: minScrollExtent ?? (hasContentDimensions ? this.minScrollExtent : null),
@@ -542,6 +561,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
       minRange: minRange ?? this.minRange,
       maxRange: maxRange ?? this.maxRange,
       correctionOffset: correctionOffset ?? this.correctionOffset,
+      devicePixelRatio: devicePixelRatio ?? this.devicePixelRatio,
     );
   }
 
@@ -560,6 +580,7 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
     this._parent,
     this._onHasScrolledBodyChanged,
     this._floatHeaderSlivers,
+    this._devicePixelRatio,
   ) {
     final double initialScrollOffset = _parent?.initialScrollOffset ?? 0.0;
     _outerController = _NestedScrollController(
@@ -573,6 +594,7 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
     );
   }
 
+  final double _devicePixelRatio;
   final CustomNestedScrollViewState _state;
   ScrollController? _parent;
   final VoidCallback _onHasScrolledBodyChanged;
@@ -806,6 +828,7 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
       minRange: minRange,
       maxRange: maxRange,
       correctionOffset: correctionOffset,
+      devicePixelRatio: _devicePixelRatio,
     );
   }
 

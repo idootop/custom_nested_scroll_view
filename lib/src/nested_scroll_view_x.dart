@@ -53,6 +53,7 @@ class CustomNestedScrollViewStateX extends CustomNestedScrollViewState {
       widget.controller,
       _handleHasScrolledBodyChanged,
       widget.floatHeaderSlivers,
+      getDevicePixelRatio(),
     );
   }
 }
@@ -100,7 +101,8 @@ class _NestedScrollCoordinatorX extends _NestedScrollCoordinator {
     ScrollController? parent,
     VoidCallback onHasScrolledBodyChanged,
     bool floatHeaderSlivers,
-  ) : super(state, parent, onHasScrolledBodyChanged, floatHeaderSlivers) {
+    double devicePixelRatio,
+  ) : super(state, parent, onHasScrolledBodyChanged, floatHeaderSlivers, devicePixelRatio) {
     final double initialScrollOffset = _parent?.initialScrollOffset ?? 0.0;
     _outerController = _NestedScrollControllerX(
       this,
@@ -148,6 +150,7 @@ class _NestedScrollCoordinatorX extends _NestedScrollCoordinator {
       minRange: 0,
       maxRange: 0,
       correctionOffset: 0,
+      devicePixelRatio: _devicePixelRatio,
     );
   }
 
