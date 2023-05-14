@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// Last Updated: [Flutter 3.11.0-5.0.pre](https://github.com/flutter/flutter/commit/dd7d4b952112f988cb85dcc905eb7858e83f62a2)
+
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -192,9 +194,7 @@ class _NestedScrollView extends StatefulWidget {
   /// scroll view is scrolled.
   final ScrollController? controller;
 
-  /// The axis along which the scroll view scrolls.
-  ///
-  /// Defaults to [Axis.vertical].
+  /// {@macro flutter.widgets.scroll_view.scrollDirection}
   final Axis scrollDirection;
 
   /// Whether the scroll view scrolls in the reading direction.
@@ -517,6 +517,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
     required super.pixels,
     required super.viewportDimension,
     required super.axisDirection,
+    required super.devicePixelRatio,
     required this.minRange,
     required this.maxRange,
     required this.correctionOffset,
@@ -529,6 +530,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
     double? pixels,
     double? viewportDimension,
     AxisDirection? axisDirection,
+    double? devicePixelRatio,
     double? minRange,
     double? maxRange,
     double? correctionOffset,
@@ -539,6 +541,7 @@ class _NestedScrollMetrics extends FixedScrollMetrics {
       pixels: pixels ?? (hasPixels ? this.pixels : null),
       viewportDimension: viewportDimension ?? (hasViewportDimension ? this.viewportDimension : null),
       axisDirection: axisDirection ?? this.axisDirection,
+      devicePixelRatio: devicePixelRatio ?? this.devicePixelRatio,
       minRange: minRange ?? this.minRange,
       maxRange: maxRange ?? this.maxRange,
       correctionOffset: correctionOffset ?? this.correctionOffset,
@@ -806,6 +809,7 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
       minRange: minRange,
       maxRange: maxRange,
       correctionOffset: correctionOffset,
+      devicePixelRatio: _outerPosition!.devicePixelRatio,
     );
   }
 
@@ -894,7 +898,10 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
     // If an update is made to pointer scrolling here, consider if the same
     // (or similar) change should be made in
     // ScrollPositionWithSingleContext.pointerScroll.
-    assert(delta != 0.0);
+    if (delta == 0.0) {
+      goBallistic(0.0);
+      return;
+    }
 
     goIdle();
     updateUserScrollDirection(
@@ -1079,7 +1086,7 @@ class _NestedScrollCoordinator implements ScrollActivityDelegate, ScrollHoldCont
 
   void updateParent() {
     _outerPosition?.setParent(
-      _parent ?? PrimaryScrollController.of(_state.context),
+      _parent ?? PrimaryScrollController.maybeOf(_state.context),
     );
   }
 
