@@ -38,15 +38,16 @@ dependencies:
     git:
       url: https://github.com/idootop/custom_nested_scroll_view.git
       # Which branch to use is based on your local flutter version
-      ref: flutter-3.4-pre # flutter-2.x flutter-3.0 main
+      ref: main # flutter-2.x flutter-3.0 flutter-3.4 flutter-3.7
 ```
 
-|    Git branch   | Supported flutter versions |
-|---------------|--------------------------|
-| main            | >=3.4.0-27.0.pre          |
-| flutter-3.4-pre | >=3.4.0-17.0.pre <3.4.0-27.0.pre |
+| Git branch      | Supported flutter versions       |
+| --------------- | -------------------------------- |
+| main     | >=3.7.0-13.0.pre |
+| flutter-3.7     | >=3.4.0-27.0.pre <3.7.0-13.0.pre |
+| flutter-3.4 | >=3.4.0-17.0.pre <3.4.0-27.0.pre |
 | flutter-3.0     | >=2.12.0-4.0.pre <3.4.0-17.0.pre |
-| flutter-2.x     | <2.12.0-4.0.pre           |
+| flutter-2.x     | <2.12.0-4.0.pre                  |
 
 ```dart
 import 'package:flutter/material.dart';
