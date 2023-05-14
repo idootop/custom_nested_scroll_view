@@ -218,7 +218,8 @@ class _NestedScrollPositionY extends _NestedScrollPosition {
           activity?.shouldIgnorePointer ?? true,
         );
       case _NestedBallisticScrollActivityMode.independent:
-        return BallisticScrollActivity(this, simulation, context.vsync, activity?.shouldIgnorePointer ?? true);
+        return BallisticScrollActivity(this, simulation, context.vsync,
+            activity?.shouldIgnorePointer ?? true);
     }
   }
 }
