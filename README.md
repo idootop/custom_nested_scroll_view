@@ -1,4 +1,6 @@
-# custom_nested_scroll_view
+# [Deprecated] custom_nested_scroll_view
+
+> This repository is no longer maintained. Please migrate to: [nested_scroll_view_plus](https://github.com/idootop/nested_scroll_view_plus)
 
 A NestedScrollView that supports outer scroller to top overscroll.
 
